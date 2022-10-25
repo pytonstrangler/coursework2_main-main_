@@ -23,6 +23,11 @@
     </div>
   </header>
   <main class="container">
+    <div class="search">
+      <form action="/search" class="search__form">
+        <input type="search" class="search__input">
+      </form>
+    </div>
     <section class="items">
 
       {% for post in posts %}
@@ -38,7 +43,8 @@
         <a href="/posts/{{ post.pk }}" class="item__post-link">
           <img src="{{ post.pic }}" alt="" width="348" class="item__post-img">
         </a>
-        <p class="item__descr">{{ post.content }}</p>
+        <p class="item__descr">{{post.content}}...<a href="/posts/{{post.pk}}"
+                                                     class="item__btn-more">Еще</a></p>
         <div class="item__post-info">
           <div class="item__counter">
             <img src="/static/img/eye.png" alt="" class="item__counter-icon" width="80" height="82">

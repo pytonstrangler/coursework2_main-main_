@@ -7,11 +7,11 @@ app = Flask("mini_insta")
 
 @app.route("/")
 def main_page():
-    posts_data = functions.open_json("data/data.json")
-    comments_data = functions.open_json("data/comments.json")
-    bookmarks = functions.open_json("data/bookmarks.json")
+    posts_data = functions.open_json("../data/data.json")
+    comments_data = functions.open_json("../data/comments.json")
+    bookmarks = functions.open_json("../data/bookmarks.json")
 
-    # posts_data = functions.string_crop(posts_data)
+    posts_data = functions.string_crop(posts_data)
     posts_data = functions.comments_count(posts_data, comments_data)
 
     bookmarks_quantity = len(bookmarks)
@@ -21,8 +21,8 @@ def main_page():
 
 @app.route("/posts/<postid>")
 def post_page(postid):
-    posts_data = functions.open_json("data/data.json")
-    comments_data = functions.open_json("data/comments.json")
+    posts_data = functions.open_json("../data/data.json")
+    comments_data = functions.open_json("../data/comments.json")
     postid = int(postid)
     output_post = functions.get_post_by_pk(posts_data, postid)
     tags = functions.get_tags(output_post)
@@ -36,8 +36,8 @@ def post_page(postid):
 
 @app.route("/search/")
 def search_page():
-    posts_data = functions.open_json('data/data.json')
-    comments_data = functions.open_json('data/comments.json')
+    posts_data = functions.open_json('../data/data.json')
+    comments_data = functions.open_json('../data/comments.json')
 
     s = request.args.get('s')
     if s is None:
@@ -53,8 +53,8 @@ def search_page():
 
 @app.route('/users/<username>')
 def user_feed(username):
-    posts_data = functions.open_json('data/data.json')
-    comments_data = functions.open_json('data/comments.json')
+    posts_data = functions.open_json('../data/data.json')
+    comments_data = functions.open_json('../data/comments.json')
 
     match = functions.get_posts_by_user(posts_data, username)
     posts = functions.comments_count(match, comments_data)
@@ -64,7 +64,7 @@ def user_feed(username):
 
 @app.route('/tag/<tagname>')
 def tag_page(tagname):
-    posts_data = functions.open_json('data/data.json')
+    posts_data = functions.open_json('../data/data.json')
 
     tagname = '#' + tagname
     output_posts = []
@@ -81,7 +81,7 @@ def add_bookmark(postid):
     postid = int(postid)
     # posts_data = functions.open_json('data/bookmarks.json')
 
-    bookmarked_posts = functions.open_json('data/bookmarks.json')
+    bookmarked_posts = functions.open_json('../data/bookmarks.json')
     for bookmark in bookmarked_posts:
         if postid == bookmark['pk']:
             return redirect('/', code=302)
@@ -90,19 +90,19 @@ def add_bookmark(postid):
 @app.route('/bookmarks/remove/<postid>')
 def remove_bookmark(postid):
     postid = int(postid)
-    bookmarks = functions.open_json('data/bookmarks.json')
+    bookmarks = functions.open_json('../data/bookmarks.json')
 
     for bookmark in bookmarks:
         if postid == bookmark['pk']:
             bookmarks.remove(bookmark)
 
-    functions.write_json('data/bookmarks.json', bookmarks)
+    functions.write_json('../data/bookmarks.json', bookmarks)
     return redirect('/', code=302)
 
 
 @app.route('/api/posts/')
 def api_posts():
-    posts_data = functions.open_json("data/data.json")
+    posts_data = functions.open_json("../data/data.json")
     return jsonify(posts_data)
 
 
@@ -118,8 +118,8 @@ def resource_not_found(e):
 
 @app.route("/bookmarks")
 def bookmarks_page():
-    bookmarks = functions.open_json('data/bookmarks.json')
-    comments_data = functions.open_json('data/comments.json')
+    bookmarks = functions.open_json('../data/bookmarks.json')
+    comments_data = functions.open_json('../data/comments.json')
 
     bookmarks = functions.string_crop(bookmarks)
     bookmarks = functions.comments_count(bookmarks, comments_data)
