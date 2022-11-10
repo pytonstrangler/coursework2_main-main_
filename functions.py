@@ -14,6 +14,10 @@ def open_json(file) -> list:
     return json_data
 
 
+def load_posts():
+    return open_json('data/posts.json')
+
+
 def write_json(file, data) -> None:
     """
     функция производит запись данных в .json файл
@@ -52,25 +56,31 @@ def string_crop(posts_data) -> list:
     :return: обновленный post-data
     """
     for post in posts_data:
-        post["content"] = post["content"][:50]
+        post["content"] = post["content"][:100]
 
     return posts_data
 
 
-def get_post_by_pk(posts_data, post_id) -> dict:
+def get_post_by_pk(posts_data, pk) -> dict:  # убрал  -> dict после скобок
     """
         функция отдает пост, который соответствует определенному идентификатору
 
         :param posts_data: данные о размещенных на сайте постах из data.json
-        :param post_id: параметр, соответствующий идентификатору
+        :param pk: параметр, соответствующий идентификатору
         :return: пост, соответствующий введенному идентификатору
         """
     output_post = {}
     for post in posts_data:
-        if post_id == post["pk"]:
+        if pk == post["pk"]:
             output_post = post
 
     return output_post
+
+
+def new_get_post_by_pk(pk):
+    for post in load_posts():
+        if post["pk"] == pk:
+            return post
 
 
 def get_posts_by_user(posts_data, user_name) -> list:
@@ -95,10 +105,8 @@ def get_posts_by_user(posts_data, user_name) -> list:
 
 def get_comments_by_post_id(comment_data: dict, id_post: int) -> list:
     output_post = []
-    is_exists = False
     for post in comment_data:
         if id_post == post["post_id"]:
-            is_exists = True
             output_post.append(post)
 
     # if not output_post:
